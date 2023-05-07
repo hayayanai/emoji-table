@@ -1,0 +1,27 @@
+name: Generator
+
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+  generate-emoji-table:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          architecture: 'x64'
+          cache: 'pip'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run Python
+        run: python generator.py > emoji-table.txt
+      - name: Upload output
+        uses: actions/upload-artifact@v3
+        with:
+          name: emoji-table
+          path: emoji-table.txt
