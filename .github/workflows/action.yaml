@@ -2,8 +2,8 @@ name: Generator
 
 on:
   push:
-    branches: 
-      - main
+    tags:
+      - 'v*.*.*'
 
 jobs:
   generate-emoji-table:
@@ -20,8 +20,12 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run Python
         run: python generator.py > emoji-table.txt
-      - name: Upload output
-        uses: actions/upload-artifact@v3
-        with:
-          name: emoji-table
-          path: emoji-table.txt
+      - name: concat files
+        run: cat romantable-orig.txt emoji-table.txt > romantable.txt
+      - name: release
+        - uses: "marvinpinto/action-automatic-releases@latest"
+            with:
+              repo_token: "${{ secrets.GITHUB_TOKEN }}"
+              prerelease: false
+              files: |
+                romantable.txt
