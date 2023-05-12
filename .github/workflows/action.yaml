@@ -29,3 +29,4 @@ jobs:
           prerelease: false
           files: |
             romantable.txt
+        run: echo "DONE!"
